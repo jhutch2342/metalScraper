@@ -1,0 +1,1 @@
+node index.js > ../metalData/data$(echo $(date +"%T") | tr ":" "_")
