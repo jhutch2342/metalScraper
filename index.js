@@ -15,7 +15,7 @@ function getPageData(url) {
 	})
 }
 
-function getMetalData(date) {
+function getFirstNationalMetalData(date) {
 	return new Promise(async resolve => {
 		//Pull Metal data from First National Bullion
 		let url = 'https://firstnationalbullion.com/';
@@ -53,7 +53,7 @@ function getMetalData(date) {
 	})
 }
 
-function getProductData(metal,date) {
+function getFirstNationalProductData(metal,date) {
 	return new Promise(async resolve => {
 			//Pull Gold coin data from First National Bullion
 			url = 'https://firstnationalbullion.com/product-category/' + metal + '/';
@@ -80,6 +80,45 @@ function getProductData(metal,date) {
 		})
 }
 
+function getMoneyMetalsExchangeMetalData(date) {
+	return new Promise(async resolve => {
+		//Pull Metal data from First National Bullion
+		let url = 'https://www.moneymetals.com/';
+		let html = await getPageData(url)
+		const $ = cheerio.load(html)
+		let metals = [];
+		let goldPrice = $('span#sp-price-gold').text().replace("$","").replace(",","")
+		let goldDelta = $('i#sp-icon-gold').text().replace("$","").replace(",","").replace(/\n/g,"")
+		let silverPrice = $('span#sp-price-silver').text().replace("$","").replace(",","")
+		let silverDelta = $('i#sp-icon-silver').text().replace("$","").replace(",","").replace(/\n/g,"")
+		let platinumPrice = $('span#sp-price-platinum').text().replace("$","").replace(",","")
+		let platinumDelta = $('i#sp-icon-platinum').text().replace("$","").replace(",","").replace(/\n/g,"")
+		metals.push({
+			name : "Gold",
+			price: goldPrice,
+			change : goldDelta,
+			source : "Money Metals Exchange",
+			date : date
+		})
+		metals.push({
+			name : "Silver",
+			price: silverPrice,
+			change : silverDelta,
+			source : "Money Metals Exchange",
+			date : date
+		})
+		metals.push({
+			name : "Platinum",
+			price: platinumPrice,
+			change : platinumDelta,
+			source : "Money Metals Exchange",
+			date : date
+		})
+		resolve(metals)
+	})
+}
+
+
 async function getData() {
 	date = new Date()
 	date = date.getFullYear()
@@ -88,10 +127,11 @@ async function getData() {
 		+ " " + date.getHours()
 		+ ":" + date.getMinutes()
 		+ ":" + date.getSeconds()
-	let metals = await getMetalData(date)
-	let gold = await getProductData("gold",date)
-	let silver = await getProductData("silver",date)
-	let platinum = await getProductData("platinum",date)
+	let firstNationalMetals = await getFirstNationalMetalData(date)
+	let moneyMetalsExchange = await getMoneyMetalsExchangeMetalData(date)
+	let gold = await getFirstNationalProductData("gold",date)
+	let silver = await getFirstNationalProductData("silver",date)
+	let platinum = await getFirstNationalProductData("platinum",date)
 	let metalProducts = [gold,silver,platinum]
 	let con = mysql.createConnection({
 		host: "localhost",
@@ -104,11 +144,22 @@ async function getData() {
 		//Add metal data
 		for(i=0; i<=2; i++) {
 			let sql = "insert into metalData (metal,price,delta,date,source) values (\'"
-			 + metals[i]['name'] + "\',\'"
-			 + metals[i]['price'] + "\',\'"
-			 + metals[i]['change'] + "\',\'"
-			 + metals[i]['date'] + "\',\'"
-			 + metals[i]['source'] + "\')"
+			 + firstNationalMetals[i]['name'] + "\',\'"
+			 + firstNationalMetals[i]['price'] + "\',\'"
+			 + firstNationalMetals[i]['change'] + "\',\'"
+			 + firstNationalMetals[i]['date'] + "\',\'"
+			 + firstNationalMetals[i]['source'] + "\')"
+			 con.query(sql, function(err, result) {
+				 if(err) throw err
+			 })
+		}
+		for(i=0; i<=2; i++) {
+			let sql = "insert into metalData (metal,price,delta,date,source) values (\'"
+			 + moneyMetalsExchange[i]['name'] + "\',\'"
+			 + moneyMetalsExchange[i]['price'] + "\',\'"
+			 + moneyMetalsExchange[i]['change'] + "\',\'"
+			 + moneyMetalsExchange[i]['date'] + "\',\'"
+			 + moneyMetalsExchange[i]['source'] + "\')"
 			 con.query(sql, function(err, result) {
 				 if(err) throw err
 			 })
