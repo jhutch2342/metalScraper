@@ -30,34 +30,22 @@ function getMetalData(date) {
 					name : s[1].replace(/\s/g, ''),
 					price : s[2].replace("$","").replace(",",""),
 					change : s[4].replace("$","").replace(",",""),
-					date : date.getFullYear()
-						+ "-" + (date.getMonth() + 1)
-						+ "-" + date.getDate()
-						+ " " + date.getHours()
-						+ ":" + date.getMinutes()
-						+ ":" + date.getSeconds()
+					source: "First National Bullion",
+					date : date
 				})
 				metals.push({
 					name : s[6].replace(/\s/g, ''),
 					price : s[7].replace("$","").replace(",",""),
 					change : s[9].replace("$","").replace(",",""),
-					date : date.getFullYear()
-						+ "-" + (date.getMonth() + 1)
-						+ "-" + date.getDate()
-						+ " " + date.getHours()
-						+ ":" + date.getMinutes()
-						+ ":" + date.getSeconds()
+					source: "First National Bullion",
+					date : date
 				})
 				metals.push({
 					name : s[11].replace(/\s/g, ''),
 					price : s[12].replace("$","").replace(",",""),
 					change : s[14].replace("$","").replace(",",""),
-					date : date.getFullYear()
-						+ "-" + (date.getMonth() + 1)
-						+ "-" + date.getDate()
-						+ " " + date.getHours()
-						+ ":" + date.getMinutes()
-						+ ":" + date.getSeconds()
+					source: "First National Bullion",
+					date : date
 				})
 			}
 			resolve(metals)
@@ -82,12 +70,7 @@ function getProductData(metal,date) {
 				s = s.replace("We Buy","Buy").replace("We Sell", " :Sell")
 				coins[i]["buy"] = s.split(":")[0].replace("Buy ","").replace("$","").replace(",","").replace(/\s/g,'')
 				coins[i]["sell"] = s.split(":")[1].replace("Sell ","").replace("$","").replace(",","").replace(/\s/g,'')
-				coins[i]["date"] = date.getFullYear()
-					+ "-" + (date.getMonth() + 1)
-					+ "-" + date.getDate()
-					+ " " + date.getHours()
-					+ ":" + date.getMinutes()
-					+ ":" + date.getSeconds()
+				coins[i]["date"] = date
 				coins[i]["metal"] = metal
 			})
 			$('h3.product-title').each((i,elem) => {
@@ -99,6 +82,12 @@ function getProductData(metal,date) {
 
 async function getData() {
 	date = new Date()
+	date = date.getFullYear()
+		+ "-" + (date.getMonth() + 1)
+		+ "-" + date.getDate()
+		+ " " + date.getHours()
+		+ ":" + date.getMinutes()
+		+ ":" + date.getSeconds()
 	let metals = await getMetalData(date)
 	let gold = await getProductData("gold",date)
 	let silver = await getProductData("silver",date)
@@ -114,11 +103,12 @@ async function getData() {
 		if(err) throw err;
 		//Add metal data
 		for(i=0; i<=2; i++) {
-			let sql = "insert into metalData (metal,price,delta,date) values (\'"
+			let sql = "insert into metalData (metal,price,delta,date,source) values (\'"
 			 + metals[i]['name'] + "\',\'"
 			 + metals[i]['price'] + "\',\'"
 			 + metals[i]['change'] + "\',\'"
-			 + metals[i]['date'] + "\')"
+			 + metals[i]['date'] + "\',\'"
+			 + metals[i]['source'] + "\')"
 			 con.query(sql, function(err, result) {
 				 if(err) throw err
 			 })
@@ -146,5 +136,5 @@ function run() {
 	setInterval(getData, 900000)
 }
 
-run()
-// getData()
+// run()
+getData()
