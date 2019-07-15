@@ -90,6 +90,9 @@ function getGoldData(date) {
 					+ ":" + date.getSeconds()
 				coins[i]["metal"] = "Gold"
 			})
+			$('h3.product-title').each((i,elem) => {
+				coins[i]['name'] = $(elem).text().replace(/\s/g,'')
+			})
 			resolve(coins)
 		})
 }
@@ -116,8 +119,11 @@ function getSilverData(date) {
 				+ " " + date.getHours()
 				+ ":" + date.getMinutes()
 				+ ":" + date.getSeconds()
-			coins[i]["metal"] = "Gold"
+			coins[i]["metal"] = "Silver"
 		});
+		$('h3.product-title').each((i,elem) => {
+			coins[i]['name'] = $(elem).text().replace(/\s/g,'')
+		})
 		resolve(coins)
 	})
 }
@@ -145,8 +151,11 @@ function getPlatinumData(date) {
 				+ " " + date.getHours()
 				+ ":" + date.getMinutes()
 				+ ":" + date.getSeconds()
-			coins[i]["metal"] = "Gold"
+			coins[i]["metal"] = "Platinum"
 		});
+		$('h3.product-title').each((i,elem) => {
+			coins[i]['name'] = $(elem).text().replace(/\s/g,'')
+		})
 		resolve(coins)
 	})
 }
@@ -157,8 +166,6 @@ async function getData() {
 	let gold = await getGoldData(date)
 	let silver = await getSilverData(date)
 	let platinum = await getPlatinumData(date)
-	console.log(metals)
-	 console.log(gold)
 	// console.log(silver)
 	// console.log(platinum)
 	let con = mysql.createConnection({
@@ -182,40 +189,46 @@ async function getData() {
 		}
 		//Add gold product database
 		for(i=0; i<gold.length; i++) {
-			sql = "insert into products (metal,buy,sell,date) values (\'"
+			sql = "insert into products (metal,buy,sell,date,name) values (\'"
 			+ gold[i]['metal'] + "\',\'"
 			+ gold[i]["buy"] + "\',\'"
 			+ gold[i]["sell"] + "\',\'"
-			+ gold[i]["date"] + "\')"
-			console.log(sql)
+			+ gold[i]["date"] + "\',\'"
+			+ gold[i]['name'] + "\')"
 			con.query(sql, function(err, result) {
 				if(err) throw err
 			})
 		}
 		for(i=0; i<silver.length; i++) {
-			sql = "insert into products (metal,buy,sell,date) values (\'"
+			sql = "insert into products (metal,buy,sell,date,name) values (\'"
 			+ silver[i]['metal'] + "\',\'"
 			+ silver[i]["buy"] + "\',\'"
 			+ silver[i]["sell"] + "\',\'"
-			+ silver[i]["date"] + "\')"
-			console.log(sql)
+			+ silver[i]["date"] + "\',\'"
+			+ silver[i]['name'] + "\')"
 			con.query(sql, function(err, result) {
 				if(err) throw err
 			})
 		}
 		for(i=0; i<platinum.length; i++) {
-			sql = "insert into products (metal,buy,sell,date) values (\'"
+			sql = "insert into products (metal,buy,sell,date,name) values (\'"
 			+ platinum[i]['metal'] + "\',\'"
 			+ platinum[i]["buy"] + "\',\'"
 			+ platinum[i]["sell"] + "\',\'"
-			+ platinum[i]["date"] + "\')"
-			console.log(sql)
+			+ platinum[i]["date"] + "\',\'"
+			+ platinum[i]['name'] + "\')"
 			con.query(sql, function(err, result) {
 				if(err) throw err
 			})
 		}
 		con.end()
+		console.log(date)
 	})
 }
 
+function run() {
+	//setInterval(getData, 10000)
+}
+
+//run()
 getData()
