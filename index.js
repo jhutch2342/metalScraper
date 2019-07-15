@@ -2,189 +2,6 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const mysql = require('mysql');
 
-
-/*
-function getMetalData() {
-	return new Promise(function(resolve) {
-		axios.get(url)
-			.then(response => {
-				//console.log(response.data)
-				//console.log("-------------------------------")
-				getMetalData(response.data)
-			})
-			.catch(error => {
-				console.log(error);
-			})
-
-		date = new Date().toUTCString()
-		function getMetalData(html) {
-			const $ = cheerio.load(html)
-			let metals = [];
-			$('div#spotprice').each((i,elem) => {
-				if(i === 0) {
-					//console.log(i);
-					let s = $(elem).text().toString().split(" ")
-					//console.log($(elem).text());
-					//console.log(s);
-					metals.push({
-						name : s[1],
-						price : s[2],
-						change : s[4],
-						date : date
-					})
-					metals.push({
-						name : s[6],
-						price : s[7],
-						change : s[9],
-						date : date
-					})
-					metals.push({
-						name : s[11],
-						price : s[12],
-						change : s[14],
-						date : date
-					})
-				}
-			})
-		}
-	})
-}
-*/
-
-// function getGoldData() {
-// 	return new Promise(resolve => {
-//
-// 		//Pull Gold coin data from First National Bullion
-// 		url = 'https://firstnationalbullion.com/product-category/gold/';
-//
-// 		axios.get(url)
-// 			.then(response => {
-// 				getGoldCoinData(response.data)
-// 			})
-// 			.catch(error => {
-// 				console.log(error);
-// 			})
-//
-// 		date = new Date().toUTCString()
-// 		let getGoldCoinData = html => {
-// 			const $ = cheerio.load(html)
-// 			let coins = [];
-// 			/*
-// 			$('span').each((i,elem) => {
-// 				console.log($(elem).text())
-// 			});
-// 			*/
-// 			$('h3.product-title').each((i,elem) => {
-// 				coins.push({
-// 					name : $(elem).text()
-// 				})
-// 			});
-// 			$('div.fusion-price-rating').each((i,elem) => {
-// 				let s = $(elem).text().toString()
-// 				s = s.replace("We Buy","Buy").replace("We Sell", " :Sell")
-// 				//console.log($(elem).text());
-// 				//console.log(s.split(":")[0])
-// 				coins[i]["buy"] = s.split(":")[0]
-// 				coins[i]["sell"] = s.split(":")[1]
-// 				coins[i]["date"] = date
-// 				coins[i]["metal"] = "Gold"
-// 				//coins[i]["data"] = $(elem).text();
-// 				//console.log(s);
-// 			});
-// 			resolve(coins)
-// 		}
-// 	})
-// }
-
-// function getSilverData() {
-// 	return new Promise(resolve => {
-// 		//Pull Silver coin data from First National Bullion
-// 		url = 'https://firstnationalbullion.com/product-category/silver/';
-//
-// 		axios.get(url)
-// 			.then(response => {
-// 				getSilverCoinData(response.data)
-// 			})
-// 			.catch(error => {
-// 				console.log(error);
-// 			})
-//
-// 		date = new Date().toUTCString()
-// 		let getSilverCoinData = html => {
-// 			const $ = cheerio.load(html)
-// 			let coins = [];
-// 			/*
-// 			$('span').each((i,elem) => {
-// 				console.log($(elem).text())
-// 			});
-// 			*/
-// 			$('h3.product-title').each((i,elem) => {
-// 				coins.push({
-// 					name : $(elem).text()
-// 				})
-// 			});
-// 			$('div.fusion-price-rating').each((i,elem) => {
-// 				let s = $(elem).text().toString()
-// 				s = s.replace("We Buy","Buy").replace("We Sell", " :Sell")
-// 				//console.log($(elem).text());
-// 				//console.log(s.split(":")[0])
-// 				coins[i]["buy"] = s.split(":")[0]
-// 				coins[i]["sell"] = s.split(":")[1]
-// 				coins[i]["date"] = date
-// 				coins[i]["metal"] = "Silver"
-// 				//coins[i]["data"] = $(elem).text();
-// 				//console.log(s);
-// 			});
-// 			console.log(coins);
-// 			resolve(coins)
-// 		}
-// 	})
-// }
-
-// function getPlatinumData() {
-// 	return new Promise(resolve => {
-// 		//Pull Platinum coin data from First National Bullion
-// 		url = 'https://firstnationalbullion.com/product-category/platinum/';
-//
-// 		axios.get(url)
-// 			.then(response => {
-// 				getPlatinumCoinData(response.data)
-// 			})
-// 			.catch(error => {
-// 				console.log(error);
-// 			})
-//
-// 		date = new Date().toUTCString()
-// 		let getPlatinumCoinData = html => {
-// 			const $ = cheerio.load(html)
-// 			let coins = [];
-// 			/*
-// 			$('span').each((i,elem) => {
-// 				console.log($(elem).text())
-// 			});
-// 			*/
-// 			$('h3.product-title').each((i,elem) => {
-// 				coins.push({
-// 					name : $(elem).text()
-// 				})
-// 			});
-// 			$('div.fusion-price-rating').each((i,elem) => {
-// 				let s = $(elem).text().toString()
-// 				s = s.replace("We Buy","Buy").replace("We Sell", " :Sell")
-// 				//console.log($(elem).text());
-// 				//console.log(s.split(":")[0])
-// 				coins[i]["buy"] = s.split(":")[0]
-// 				coins[i]["sell"] = s.split(":")[1]
-// 				coins[i]["date"] = date
-// 				coins[i]["metal"] = "Platinum"
-// 				//coins[i]["data"] = $(elem).text();
-// 				//console.log(s);
-// 			});
-// 			resolve(coins)
-// 		}
-// 	})
-// }
-
 function getPageData(url) {
 	return new Promise(resolve => {
 		axios.get(url)
@@ -210,22 +27,37 @@ function getMetalData(date) {
 				//console.log(i);
 				let s = $(elem).text().toString().split(" ")
 				metals.push({
-					name : s[1],
-					price : s[2],
-					change : s[4],
-					date : date
+					name : s[1].replace(/\s/g, ''),
+					price : s[2].replace("$","").replace(",",""),
+					change : s[4].replace("$","").replace(",",""),
+					date : date.getFullYear()
+						+ "-" + (date.getMonth() + 1)
+						+ "-" + date.getDate()
+						+ " " + date.getHours()
+						+ ":" + date.getMinutes()
+						+ ":" + date.getSeconds()
 				})
 				metals.push({
-					name : s[6],
-					price : s[7],
-					change : s[9],
-					date : date
+					name : s[6].replace(/\s/g, ''),
+					price : s[7].replace("$","").replace(",",""),
+					change : s[9].replace("$","").replace(",",""),
+					date : date.getFullYear()
+						+ "-" + (date.getMonth() + 1)
+						+ "-" + date.getDate()
+						+ " " + date.getHours()
+						+ ":" + date.getMinutes()
+						+ ":" + date.getSeconds()
 				})
 				metals.push({
-					name : s[11],
-					price : s[12],
-					change : s[14],
-					date : date
+					name : s[11].replace(/\s/g, ''),
+					price : s[12].replace("$","").replace(",",""),
+					change : s[14].replace("$","").replace(",",""),
+					date : date.getFullYear()
+						+ "-" + (date.getMonth() + 1)
+						+ "-" + date.getDate()
+						+ " " + date.getHours()
+						+ ":" + date.getMinutes()
+						+ ":" + date.getSeconds()
 				})
 			}
 			resolve(metals)
@@ -248,9 +80,14 @@ function getGoldData(date) {
 			$('div.fusion-price-rating').each((i,elem) => {
 				let s = $(elem).text().toString()
 				s = s.replace("We Buy","Buy").replace("We Sell", " :Sell")
-				coins[i]["buy"] = s.split(":")[0]
-				coins[i]["sell"] = s.split(":")[1]
-				coins[i]["date"] = date
+				coins[i]["buy"] = s.split(":")[0].replace("Buy ","").replace("$","").replace(",","").replace(/\s/g,'')
+				coins[i]["sell"] = s.split(":")[1].replace("Sell ","").replace("$","").replace(",","").replace(/\s/g,'')
+				coins[i]["date"] = date.getFullYear()
+					+ "-" + (date.getMonth() + 1)
+					+ "-" + date.getDate()
+					+ " " + date.getHours()
+					+ ":" + date.getMinutes()
+					+ ":" + date.getSeconds()
 				coins[i]["metal"] = "Gold"
 			})
 			resolve(coins)
@@ -271,10 +108,15 @@ function getSilverData(date) {
 		$('div.fusion-price-rating').each((i,elem) => {
 			let s = $(elem).text().toString()
 			s = s.replace("We Buy","Buy").replace("We Sell", " :Sell")
-			coins[i]["buy"] = s.split(":")[0]
-			coins[i]["sell"] = s.split(":")[1]
-			coins[i]["date"] = date
-			coins[i]["metal"] = "Silver"
+			coins[i]["buy"] = s.split(":")[0].replace("Buy ","").replace("$","").replace(",","").replace(/\s/g,'')
+			coins[i]["sell"] = s.split(":")[1].replace("Sell ","").replace("$","").replace(",","").replace(/\s/g,'')
+			coins[i]["date"] = date.getFullYear()
+				+ "-" + (date.getMonth() + 1)
+				+ "-" + date.getDate()
+				+ " " + date.getHours()
+				+ ":" + date.getMinutes()
+				+ ":" + date.getSeconds()
+			coins[i]["metal"] = "Gold"
 		});
 		resolve(coins)
 	})
@@ -287,11 +129,6 @@ function getPlatinumData(date) {
 		let html = await getPageData(url)
 		const $ = cheerio.load(html)
 		let coins = [];
-		/*
-		$('span').each((i,elem) => {
-			console.log($(elem).text())
-		});
-		*/
 		$('h3.product-title').each((i,elem) => {
 			coins.push({
 				name : $(elem).text()
@@ -300,157 +137,85 @@ function getPlatinumData(date) {
 		$('div.fusion-price-rating').each((i,elem) => {
 			let s = $(elem).text().toString()
 			s = s.replace("We Buy","Buy").replace("We Sell", " :Sell")
-			//console.log($(elem).text());
-			//console.log(s.split(":")[0])
-			coins[i]["buy"] = s.split(":")[0]
-			coins[i]["sell"] = s.split(":")[1]
-			coins[i]["date"] = date
-			coins[i]["metal"] = "Platinum"
-			//coins[i]["data"] = $(elem).text();
-			//console.log(s);
+			coins[i]["buy"] = s.split(":")[0].replace("Buy ","").replace("$","").replace(",","").replace(/\s/g,'')
+			coins[i]["sell"] = s.split(":")[1].replace("Sell ","").replace("$","").replace(",","").replace(/\s/g,'')
+			coins[i]["date"] = date.getFullYear()
+				+ "-" + (date.getMonth() + 1)
+				+ "-" + date.getDate()
+				+ " " + date.getHours()
+				+ ":" + date.getMinutes()
+				+ ":" + date.getSeconds()
+			coins[i]["metal"] = "Gold"
 		});
 		resolve(coins)
 	})
 }
 
 async function getData() {
-	date = new Date().toUTCString()
+	date = new Date()
 	let metals = await getMetalData(date)
 	let gold = await getGoldData(date)
 	let silver = await getSilverData(date)
 	let platinum = await getPlatinumData(date)
 	console.log(metals)
-	console.log(gold)
-	console.log(silver)
-	console.log(platinum)
-	// let metals = await getMetalData()
-	// let gold = await getGoldData()
-	// let silver = await getSilverData()
-	// let platinum = await getPlatinumData()
-	// console.log(metals)
-	// console.log(gold)
+	 console.log(gold)
 	// console.log(silver)
 	// console.log(platinum)
+	let con = mysql.createConnection({
+		host: "localhost",
+		user: "root",
+		password: "toor",
+		database: "metals"
+	})
+	con.connect(function(err) {
+		if(err) throw err;
+		//Add metal data
+		for(i=0; i<=2; i++) {
+			let sql = "insert into metalData (metal,price,delta,date) values (\'"
+			 + metals[i]['name'] + "\',\'"
+			 + metals[i]['price'] + "\',\'"
+			 + metals[i]['change'] + "\',\'"
+			 + metals[i]['date'] + "\')"
+			 con.query(sql, function(err, result) {
+				 if(err) throw err
+			 })
+		}
+		//Add gold product database
+		for(i=0; i<gold.length; i++) {
+			sql = "insert into products (metal,buy,sell,date) values (\'"
+			+ gold[i]['metal'] + "\',\'"
+			+ gold[i]["buy"] + "\',\'"
+			+ gold[i]["sell"] + "\',\'"
+			+ gold[i]["date"] + "\')"
+			console.log(sql)
+			con.query(sql, function(err, result) {
+				if(err) throw err
+			})
+		}
+		for(i=0; i<silver.length; i++) {
+			sql = "insert into products (metal,buy,sell,date) values (\'"
+			+ silver[i]['metal'] + "\',\'"
+			+ silver[i]["buy"] + "\',\'"
+			+ silver[i]["sell"] + "\',\'"
+			+ silver[i]["date"] + "\')"
+			console.log(sql)
+			con.query(sql, function(err, result) {
+				if(err) throw err
+			})
+		}
+		for(i=0; i<platinum.length; i++) {
+			sql = "insert into products (metal,buy,sell,date) values (\'"
+			+ platinum[i]['metal'] + "\',\'"
+			+ platinum[i]["buy"] + "\',\'"
+			+ platinum[i]["sell"] + "\',\'"
+			+ platinum[i]["date"] + "\')"
+			console.log(sql)
+			con.query(sql, function(err, result) {
+				if(err) throw err
+			})
+		}
+		con.end()
+	})
 }
 
 getData()
-//
-// //Pull Gold coin data from First National Bullion
-// url = 'https://firstnationalbullion.com/product-category/gold/';
-//
-// axios.get(url)
-// 	.then(response => {
-// 		getGoldCoinData(response.data)
-// 	})
-// 	.catch(error => {
-// 		console.log(error);
-// 	})
-//
-// date = new Date().toUTCString()
-// let getGoldCoinData = html => {
-// 	const $ = cheerio.load(html)
-// 	let coins = [];
-// 	/*
-// 	$('span').each((i,elem) => {
-// 		console.log($(elem).text())
-// 	});
-// 	*/
-// 	$('h3.product-title').each((i,elem) => {
-// 		coins.push({
-// 			name : $(elem).text()
-// 		})
-// 	});
-// 	$('div.fusion-price-rating').each((i,elem) => {
-// 		let s = $(elem).text().toString()
-// 		s = s.replace("We Buy","Buy").replace("We Sell", " :Sell")
-// 		//console.log($(elem).text());
-// 		//console.log(s.split(":")[0])
-// 		coins[i]["buy"] = s.split(":")[0]
-// 		coins[i]["sell"] = s.split(":")[1]
-// 		coins[i]["date"] = date
-// 		coins[i]["metal"] = "Gold"
-// 		//coins[i]["data"] = $(elem).text();
-// 		//console.log(s);
-// 	});
-// 	console.log(coins);
-// }
-//
-// //Pull Silver coin data from First National Bullion
-// url = 'https://firstnationalbullion.com/product-category/silver/';
-//
-// axios.get(url)
-// 	.then(response => {
-// 		getSilverCoinData(response.data)
-// 	})
-// 	.catch(error => {
-// 		console.log(error);
-// 	})
-//
-// date = new Date().toUTCString()
-// let getSilverCoinData = html => {
-// 	const $ = cheerio.load(html)
-// 	let coins = [];
-// 	/*
-// 	$('span').each((i,elem) => {
-// 		console.log($(elem).text())
-// 	});
-// 	*/
-// 	$('h3.product-title').each((i,elem) => {
-// 		coins.push({
-// 			name : $(elem).text()
-// 		})
-// 	});
-// 	$('div.fusion-price-rating').each((i,elem) => {
-// 		let s = $(elem).text().toString()
-// 		s = s.replace("We Buy","Buy").replace("We Sell", " :Sell")
-// 		//console.log($(elem).text());
-// 		//console.log(s.split(":")[0])
-// 		coins[i]["buy"] = s.split(":")[0]
-// 		coins[i]["sell"] = s.split(":")[1]
-// 		coins[i]["date"] = date
-// 		coins[i]["metal"] = "Silver"
-// 		//coins[i]["data"] = $(elem).text();
-// 		//console.log(s);
-// 	});
-// 	console.log(coins);
-// }
-//
-// //Pull Platinum coin data from First National Bullion
-// url = 'https://firstnationalbullion.com/product-category/platinum/';
-//
-// axios.get(url)
-// 	.then(response => {
-// 		getPlatinumCoinData(response.data)
-// 	})
-// 	.catch(error => {
-// 		console.log(error);
-// 	})
-//
-// date = new Date().toUTCString()
-// let getPlatinumCoinData = html => {
-// 	const $ = cheerio.load(html)
-// 	let coins = [];
-// 	/*
-// 	$('span').each((i,elem) => {
-// 		console.log($(elem).text())
-// 	});
-// 	*/
-// 	$('h3.product-title').each((i,elem) => {
-// 		coins.push({
-// 			name : $(elem).text()
-// 		})
-// 	});
-// 	$('div.fusion-price-rating').each((i,elem) => {
-// 		let s = $(elem).text().toString()
-// 		s = s.replace("We Buy","Buy").replace("We Sell", " :Sell")
-// 		//console.log($(elem).text());
-// 		//console.log(s.split(":")[0])
-// 		coins[i]["buy"] = s.split(":")[0]
-// 		coins[i]["sell"] = s.split(":")[1]
-// 		coins[i]["date"] = date
-// 		coins[i]["metal"] = "Platinum"
-// 		//coins[i]["data"] = $(elem).text();
-// 		//console.log(s);
-// 	});
-// 	console.log(coins);
-// }
