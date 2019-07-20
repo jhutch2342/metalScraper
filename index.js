@@ -187,5 +187,5 @@ function run() {
 	setInterval(getData, 900000)
 }
 
-// run()
-getData()
+run()
+//getData()
